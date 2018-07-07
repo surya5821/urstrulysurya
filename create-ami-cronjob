@@ -1,0 +1,1 @@
+*/10 * * * * /opt/aws/create-instance-ami.sh i-0b3acedd049ed7692 >> /home/centos/logs/ami-log
