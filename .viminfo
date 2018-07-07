@@ -28,16 +28,19 @@
 	"
 
 # File marks:
-'0  13  49  /opt/aws/create-instance-ami.sh
-'1  15  0  /etc/crontab
-'2  1  0  ~/crontab
-'3  1  0  /etc/cron
-'4  6  31  ~/create-instance-ami.sh
-'5  10  62  ~/create-instance-ami.sh
-'6  14  0  ~/create-instance-ami.sh
-'7  32  41  ~/ebs-snapshots.sh
+'0  121  16  ~/ebs-snapshots-to-test.sh
+'1  13  49  /opt/aws/create-instance-ami.sh
+'2  15  0  /etc/crontab
+'3  1  0  ~/crontab
+'4  1  0  /etc/cron
+'5  6  31  ~/create-instance-ami.sh
+'6  10  62  ~/create-instance-ami.sh
+'7  14  0  ~/create-instance-ami.sh
+'8  32  41  ~/ebs-snapshots.sh
 
 # Jumplist (newest first):
+-'  121  16  ~/ebs-snapshots-to-test.sh
+-'  1  0  ~/ebs-snapshots-to-test.sh
 -'  13  49  /opt/aws/create-instance-ami.sh
 -'  1  0  /opt/aws/create-instance-ami.sh
 -'  15  0  /etc/crontab
@@ -137,6 +140,12 @@
 -'  32  41  ~/ebs-snapshots.sh
 
 # History of marks within files (newest to oldest):
+
+> ~/ebs-snapshots-to-test.sh
+	"	121	16
+	^	121	17
+	.	121	0
+	+	121	0
 
 > /opt/aws/create-instance-ami.sh
 	"	13	49
