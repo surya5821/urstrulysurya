@@ -1,0 +1,13 @@
+---
+- hosts: tadaay_qa
+  become: yes
+  tasks:
+
+  - name: downloading and deploying from nexus
+# The below line is for nexus
+# maven_artifact: group_id=com.polyglot artifact_id=Tadaay repository_url=http://192.168.11.24:8081/nexus/content/repositories/tadaay/ username=polyglot password=default123 dest=/opt/tomcat/webapps/ROOT.war version=latest extension=war
+	copy:
+    src: /var/lib/jenkins/workspace/testbuild-maven/target/CounterWebApp.war
+    dest: /root/devops_practise/apache-tomcat-8.0.53/webapps/ROOT.war
+  - name: restart tomcat
+    service: name=tomcat state=restarted

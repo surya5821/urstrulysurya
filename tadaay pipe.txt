@@ -1,0 +1,58 @@
+pipeline {
+
+	agent any
+	environment {
+		MVN_HOME = '/opt/maven'
+				}
+			stages{
+   
+		stage('checkout') {
+				steps {
+					checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/surya5821/java-project.git']]])
+				}
+          
+			}
+			stage('Build') {
+				steps { 
+					sh "'${MVN_HOME}/bin/mvn' clean package"
+				}
+			}			
+
+			stage('UploadToNexus'){
+				steps {
+					nexusPublisher nexusInstanceId: '1704', nexusRepositoryId: 'tadaay', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/ROOT.war']], mavenCoordinate: [artifactId: 'Tadaay', groupId: 'com.polyglot', packaging: 'war', version: '$BUILD_NUMBER']]]
+				}
+			}
+			stage('deploy to qa'){
+				steps {
+				ansiblePlaybook credentialsId: 'a2bcd0f8-677e-49bc-be49-7aade6676fb2', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/qa_deploy.yml', sudo: true, sudoUser: null
+				}
+			}	
+			stage('updating sql file to qa db'){
+				steps {
+			ansiblePlaybook credentialsId: 'a2bcd0f8-677e-49bc-be49-7aade6676fb2', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/updatesql_qa.yml', sudo: true, sudoUser: null
+				}
+			}
+				
+			// stage('deploy to staging'){
+			//	steps {
+		   // ansiblePlaybook credentialsId: 'cf51fe53-9242-4c44-bbc4-95c84ddcfbed', installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/stg_deploy.yml', sudo: true, sudoUser: null
+			//	}
+		//	 }
+			// stage('updating sql file to stg db'){
+			//	steps {
+			//	ansiblePlaybook credentialsId: 'cf51fe53-9242-4c44-bbc4-95c84ddcfbed', installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/updatesql_stg.yml', sudo: true, sudoUser: null
+			//	}
+			//  }
+		 
+            post { 
+			failure { 
+                 slackSend "${env.JOB_NAME} ${env.BUILD_NUMBER} Fail (<${env.BUILD_URL}|Open>)"
+
+			}
+			
+        }	
+	
+    }
+	
+}
